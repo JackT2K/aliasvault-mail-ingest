@@ -1,8 +1,10 @@
-AliasVault Mail Ingest
-AliasVault Mail Ingest is a production-ready mail ingestion service for pulling messages from Microsoft 365 Exchange Online via IMAP using OAuth (application permissions) and delivering them to AliasVault via SMTP.
+## AliasVault Mail Ingest
+AliasVault Mail Ingest is a mail ingestion add on for pulling messages from Microsoft 365 Exchange Online via IMAP using OAuth (application permissions) and delivering them to AliasVault via SMTP.
 This project is designed for environments where a shared mailbox (such as a catch-all mailbox) receives mail for many aliases, and AliasVault determines which messages are accepted based on configured aliases.
 
-FEATURES
+> Transparency note: AI tooling was used to assist in the development of this project. Final design decisions, validation, and responsibility remain with the author.
+
+### FEATURES
 
 Microsoft 365 IMAP using OAuth (no Basic Authentication)
 Application-only authentication (no user credentials)
@@ -14,7 +16,7 @@ Optional mark-as-read behavior
 Designed to run continuously as a system service
 
 
-HOW IT WORKS
+### HOW IT WORKS
 
 Connects to Exchange Online using IMAP with OAuth (application permissions)
 Reads UNSEEN messages from a shared mailbox
@@ -26,7 +28,7 @@ Successfully processed messages are recorded in a local SQLite database to preve
 
 AliasVault is responsible for alias enforcement. This service does not attempt to create or guess aliases.
 
-REQUIREMENTS
+### REQUIREMENTS
 
 Python 3.10 or newer
 Microsoft 365 tenant with Exchange Online
@@ -35,15 +37,15 @@ AliasVault SMTP endpoint
 Linux host recommended
 
 
-SETUP GUIDE
-STEP 1: CLONE THE REPOSITORY
+### SETUP GUIDE
+#### STEP 1: CLONE THE REPOSITORY
 git clone https://github.com/JackT2k/aliasvault-mail-ingest.git
 cd aliasvault-mail-ingest
 
-STEP 2: INSTALL DEPENDENCIES
+#### STEP 2: INSTALL DEPENDENCIES
 pip install -r requirements.txt
 
-STEP 3: CREATE CONFIGURATION FILE
+#### STEP 3: CREATE CONFIGURATION FILE
 Copy the example configuration:
 cp config.env.example config.env
 Edit config.env and populate:
@@ -55,7 +57,7 @@ Shared mailbox address
 AliasVault SMTP host and port
 
 
-STEP 4: MICROSOFT 365 CONFIGURATION
+#### STEP 4: MICROSOFT 365 CONFIGURATION
 The following must already be configured in Microsoft 365:
 
 App registration with IMAP.AccessAsApp application permission
@@ -66,14 +68,14 @@ FullAccess permission on the shared mailbox for the application
 
 Tenant configuration is not automated by this project.
 
-STEP 5: RUN MANUALLY (TESTING)
+#### STEP 5: RUN MANUALLY (TESTING)
 Load the environment and start the script:
 export $(cat config.env | xargs)
 python3 ingest.py
 To test without sending mail to AliasVault, set the following in config.env:
 DRY_RUN=true
 
-STEP 6: RUN AS A SYSTEM SERVICE (RECOMMENDED)
+#### STEP 6: RUN AS A SYSTEM SERVICE (RECOMMENDED)
 Copy the project to a persistent location:
 sudo mkdir -p /opt/aliasvault-mail-ingest
 sudo cp -r . /opt/aliasvault-mail-ingest
@@ -84,12 +86,12 @@ sudo systemctl enable --now aliasvault-mail-ingest
 View logs with:
 journalctl -u aliasvault-mail-ingest -f
 
-MARKING MESSAGES AS READ
+### MARKING MESSAGES AS READ
 By default, messages remain unread in the shared mailbox.
 To mark messages as read after successful processing, set the following in config.env:
 KEEP_UNSEEN=false
 MARK_AS_READ=true
 
-SMTP REJECTIONS
+### SMTP REJECTIONS
 AliasVault may return SMTP 554 errors when a recipient alias is not configured.
 This is expected behavior and indicates correct alias enforcement.
