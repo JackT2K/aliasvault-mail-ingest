@@ -39,15 +39,20 @@ Linux host recommended
 
 ### SETUP GUIDE
 #### STEP 1: CLONE THE REPOSITORY
-git clone https://github.com/JackT2k/aliasvault-mail-ingest.git
-cd aliasvault-mail-ingest
+
+`` git clone https://github.com/JackT2k/aliasvault-mail-ingest.git ``
+
+`` cd aliasvault-mail-ingest ``
 
 #### STEP 2: INSTALL DEPENDENCIES
-pip install -r requirements.txt
+
+`` pip install -r requirements.txt ``
 
 #### STEP 3: CREATE CONFIGURATION FILE
 Copy the example configuration:
-cp config.env.example config.env
+
+`` cp config.env.example config.env ``
+
 Edit config.env and populate:
 
 Azure tenant ID
@@ -70,21 +75,32 @@ Tenant configuration is not automated by this project.
 
 #### STEP 5: RUN MANUALLY (TESTING)
 Load the environment and start the script:
-export $(cat config.env | xargs)
-python3 ingest.py
+
+`` export $(cat config.env | xargs) ``
+
+`` python3 ingest.py `` 
+
 To test without sending mail to AliasVault, set the following in config.env:
-DRY_RUN=true
+DRY_RUN=true 
 
 #### STEP 6: RUN AS A SYSTEM SERVICE (RECOMMENDED)
 Copy the project to a persistent location:
-sudo mkdir -p /opt/aliasvault-mail-ingest
-sudo cp -r . /opt/aliasvault-mail-ingest
+
+`` sudo mkdir -p /opt/aliasvault-mail-ingest ``
+
+`` sudo cp -r . /opt/aliasvault-mail-ingest ``
+
 Install the systemd service:
-sudo cp systemd/aliasvault-mail-ingest.service /etc/systemd/system/
-sudo systemctl daemon-reload
-sudo systemctl enable --now aliasvault-mail-ingest
+
+`` sudo cp systemd/aliasvault-mail-ingest.service /etc/systemd/system/ ``
+
+`` sudo systemctl daemon-reload ``
+
+`` sudo systemctl enable --now aliasvault-mail-ingest ``
+
 View logs with:
-journalctl -u aliasvault-mail-ingest -f
+
+`` journalctl -u aliasvault-mail-ingest -f ``
 
 ### MARKING MESSAGES AS READ
 By default, messages remain unread in the shared mailbox.
