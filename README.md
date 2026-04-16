@@ -2,6 +2,8 @@
 AliasVault Mail Ingest is a mail ingestion add on for pulling messages from Microsoft 365 Exchange Online via IMAP using OAuth (application permissions) and delivering them to AliasVault via SMTP.
 This project is designed for environments where a shared mailbox (such as a catch-all mailbox) receives mail for many aliases, and AliasVault determines which messages are accepted based on configured aliases.
 
+Link to AliasVault's GitHub Repo: https://github.com/aliasvault/aliasvault
+
 > Transparency note: AI tooling was used to assist in the development of this project. Final design decisions, validation, and responsibility remain with the author.
 
 ### FEATURES
