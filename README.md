@@ -9,33 +9,51 @@ Link to AliasVault's GitHub Repo: https://github.com/aliasvault/aliasvault
 ### FEATURES
 
 Microsoft 365 IMAP using OAuth (no Basic Authentication)
+
 Application-only authentication (no user credentials)
+
 Shared mailbox support
+
 IMAP connection reuse with throttling backoff handling
+
 Alias-aware SMTP routing (RCPT TO per alias)
+
 SQLite-based deduplication (safe to re-run)
+
 Optional mark-as-read behavior
+
 Designed to run continuously as a system service
 
 
 ### HOW IT WORKS
 
 Connects to Exchange Online using IMAP with OAuth (application permissions)
+
 Reads UNSEEN messages from a shared mailbox
+
 Extracts recipients from message headers
+
 Filters recipients to a configured domain (example: @domain.tld)
+
 Sends the message to AliasVault SMTP using the alias as the SMTP recipient
+
 AliasVault accepts or rejects the message based on configured aliases
+
 Successfully processed messages are recorded in a local SQLite database to prevent duplicate processing
+
 
 AliasVault is responsible for alias enforcement. This service does not attempt to create or guess aliases.
 
 ### REQUIREMENTS
 
 Python 3.10 or newer
+
 Microsoft 365 tenant with Exchange Online
+
 App registration with IMAP application permissions
+
 AliasVault SMTP endpoint
+
 Linux host recommended
 
 
@@ -58,9 +76,13 @@ Copy the example configuration:
 Edit config.env and populate:
 
 Azure tenant ID
+
 Application (client) ID
+
 Client secret
+
 Shared mailbox address
+
 AliasVault SMTP host and port
 
 
@@ -68,10 +90,15 @@ AliasVault SMTP host and port
 The following must already be configured in Microsoft 365:
 
 App registration with IMAP.AccessAsApp application permission
+
 Admin consent granted
+
 Exchange service principal created
+
 Application access policy permitting the shared mailbox
+
 FullAccess permission on the shared mailbox for the application
+
 
 Tenant configuration is not automated by this project.
 
@@ -83,6 +110,7 @@ Load the environment and start the script:
 `` python3 ingest.py `` 
 
 To test without sending mail to AliasVault, set the following in config.env:
+
 DRY_RUN=true 
 
 #### STEP 6: RUN AS A SYSTEM SERVICE (RECOMMENDED)
@@ -106,10 +134,14 @@ View logs with:
 
 ### MARKING MESSAGES AS READ
 By default, messages remain unread in the shared mailbox.
+
 To mark messages as read after successful processing, set the following in config.env:
+
 KEEP_UNSEEN=false
+
 MARK_AS_READ=true
 
 ### SMTP REJECTIONS
 AliasVault may return SMTP 554 errors when a recipient alias is not configured.
+
 This is expected behavior and indicates correct alias enforcement.
