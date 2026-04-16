@@ -1,0 +1,15 @@
+[Unit]
+Description=AliasVault Mail Ingest (M365 IMAP OAuth -> AliasVault SMTP)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/aliasvault-mail-ingest
+EnvironmentFile=/opt/aliasvault-mail-ingest/config.env
+ExecStart=/usr/bin/python3 /opt/aliasvault-mail-ingest/ingest.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
